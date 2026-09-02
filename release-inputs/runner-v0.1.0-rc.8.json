@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "version": "0.1.0-rc.8",
   "argusSource": "ssh://git@git.wanderrun.space/wander/vuln-harness.git",
-  "argusCommit": "1dfb69a8f0b294de19683a294c68472766bcccd8",
+  "argusCommit": "86ee0d6b0eedb6a895ec2bd8fce7f95aa2a7939b",
   "runnerPackage": "deepseek-harness/packages/ssh/ssh-runner",
   "runnerProtocol": 1,
   "managedProfile": "argus-standard-v2",
