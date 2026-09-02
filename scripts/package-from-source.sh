@@ -56,7 +56,7 @@ for arch in amd64 arm64; do
   node_name="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["nodeArchives"][sys.argv[2]]["name"])' "$input" "$arch")"
   node_sha="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["nodeArchives"][sys.argv[2]]["sha256"])' "$input" "$arch")"
   curl -fsSLo "$stage/node-runtime.tar.gz" "https://nodejs.org/dist/v22.19.0/$node_name"
-  printf '%s  %s\n' "$node_sha" "$stage/node-runtime.tar.gz" | sha256sum --check --status
+  [[ "$(sha256sum "$stage/node-runtime.tar.gz" | awk '{print $1}')" == "$node_sha" ]] || { printf 'Node archive digest mismatch\n' >&2; exit 1; }
   python3 "$script_dir/make_manifest.py" --stage "$stage" --input "$input" --arch "$arch"
   cp "$stage/manifest.json" "$output_dir/manifest_linux_${arch}.json"
   cp "$stage/sbom.cdx.json" "$output_dir/sbom_linux_${arch}.cdx.json"
