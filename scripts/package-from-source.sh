@@ -65,5 +65,5 @@ for arch in amd64 arm64; do
   python3 "$script_dir/archive.py" --root "$stage" --epoch "$epoch" | zstd -19 -T0 -q -o "$output_dir/argus-runner_${version}_linux_${arch}.tar.zst"
 done
 cp "$input" "$output_dir/release-input.json"
-sha256sum "$output_dir"/* > "$output_dir/SHA256SUMS"
+(cd "$output_dir" && sha256sum ./* > SHA256SUMS)
 printf 'packaged ARGUS Runner %s\n' "$version"
