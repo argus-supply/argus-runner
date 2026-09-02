@@ -3,6 +3,12 @@ name: Verify published release
 on:
   release:
     types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Immutable Runner tag to verify
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -14,9 +20,11 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
       - run: |
           mkdir dist
-          gh release download "$GITHUB_REF_NAME" --dir dist
+          tag="${{ inputs.tag }}"
+          if [[ -z "$tag" ]]; then tag="$GITHUB_REF_NAME"; fi
+          gh release download "$tag" --dir dist
           (cd dist && sha256sum --check SHA256SUMS)
-          version="${GITHUB_REF_NAME#runner-v}"
+          version="${tag#runner-v}"
           for arch in amd64 arm64; do
             archive="dist/argus-runner_${version}_linux_${arch}.tar.zst"
             test -s "$archive"
