@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "version", "argusSource", "argusCommit", "runnerPackage", "runnerProtocol", "managedProfile", "nodeVersion", "nodeArchives"],
+  "properties": {
+    "schemaVersion": {"const": 1},
+    "version": {"type": "string", "minLength": 1},
+    "argusSource": {"type": "string", "minLength": 1},
+    "argusCommit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "runnerPackage": {"const": "deepseek-harness/packages/ssh/ssh-runner"},
+    "runnerProtocol": {"type": "integer", "minimum": 1},
+    "managedProfile": {"type": "string", "minLength": 1},
+    "nodeVersion": {"type": "string", "minLength": 1},
+    "nodeArchives": {"type": "object"}
+  }
+}

@@ -1,0 +1,25 @@
+name: Check Runner source handoff
+
+on:
+  schedule:
+    - cron: '11 5 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - run: |
+          python3 scripts/validate.py
+          newest="$(ls release-inputs/runner-v*.json | sort -V | tail -1)"
+          age="$(( ($(date -u +%s) - $(git log -1 --format=%ct -- "$newest")) / 86400 ))"
+          if (( age > 30 )); then
+            gh issue create --title "Runner source handoff review $(date -u +%F)" --body "The newest immutable Runner build input is $age days old. Review the ARGUS source authority for a candidate release; this workflow cannot access that private source and does not update or activate anything."
+          fi
+        env:
+          GH_TOKEN: ${{ github.token }}

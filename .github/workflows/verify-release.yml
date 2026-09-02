@@ -1,0 +1,27 @@
+name: Verify published release
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - run: |
+          mkdir dist
+          gh release download "$GITHUB_REF_NAME" --dir dist
+          (cd dist && sha256sum --check SHA256SUMS)
+          version="${GITHUB_REF_NAME#runner-v}"
+          for arch in amd64 arm64; do
+            archive="dist/argus-runner_${version}_linux_${arch}.tar.zst"
+            test -s "$archive"
+            zstd -dc "$archive" | tar -tf - | grep -qx 'manifest.json'
+            if zstd -dc "$archive" | tar -tf - | grep -Eq '(^/|(^|/)\.\.(/|$))'; then exit 1; fi
+          done
+        env:
+          GH_TOKEN: ${{ github.token }}

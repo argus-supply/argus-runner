@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "version": "0.1.0-rc.8",
+  "argusSource": "ssh://git@git.wanderrun.space/wander/vuln-harness.git",
+  "argusCommit": "1dfb69a8f0b294de19683a294c68472766bcccd8",
+  "runnerPackage": "deepseek-harness/packages/ssh/ssh-runner",
+  "runnerProtocol": 1,
+  "managedProfile": "argus-standard-v2",
+  "nodeVersion": "22.19.0",
+  "nodeArchives": {
+    "amd64": {"name":"node-v22.19.0-linux-x64.tar.gz","sha256":"d36e56998220085782c0ca965f9d51b7726335aed2f5fc7321c6c0ad233aa96d"},
+    "arm64": {"name":"node-v22.19.0-linux-arm64.tar.gz","sha256":"d32817b937219b8f131a28546035183d79e7fd17a86e38ccb8772901a7cd9009"}
+  }
+}
